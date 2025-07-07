@@ -1,0 +1,7 @@
+.vs
+7z*
+Build
+install
+out
+pcre/
+pcre2-10.*

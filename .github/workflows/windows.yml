@@ -1,0 +1,50 @@
+name: Windows Build
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - master
+      - v10.45
+  pull_request:
+    branches:
+      - master
+      - v10.45
+
+jobs:
+  build:
+    name: Build PCRE2 Windows
+    runs-on: windows-2022
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      # https://learn.microsoft.com/en-us/visualstudio/releases/2019/history
+      - name: Check available VS versions
+        shell: cmd
+        run: |
+          where vswhere.exe
+          vswhere.exe -all -prerelease -format json
+
+      - name: Add msbuild to PATH
+        uses: microsoft/setup-msbuild@v2
+        with:
+          msbuild-architecture: x64
+          # https://github.com/microsoft/setup-msbuild?tab=readme-ov-file#specifying-specific-versions-of-visual-studio-optional
+          # vs-version: "[16.11,16.12)"
+
+      - name: Build All Configurations
+        shell: cmd
+        run: |
+          CALL build.cmd
+
+      - name: Upload Build Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: pcre2-windows-builds
+          path: out/*.zip
+          if-no-files-found: error
+          retention-days: 7

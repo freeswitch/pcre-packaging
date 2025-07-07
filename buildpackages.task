@@ -55,6 +55,7 @@ using System.Diagnostics;
             {
                 Directory.CreateDirectory(package_root + @"\include");
                 CopyFilesRecursively(new DirectoryInfo(@"install\$(Platform)\$(Configuration)\include\"), new DirectoryInfo(package_root + @"\include"));
+                File.Copy(@"$(BaseDir)install\$(Platform)\$(Configuration)\share\doc\pcre2\LICENCE.md", package_root + @"\LICENCE.md", true);
 
                 ZipFile.CreateFromDirectory(@"$(BaseDir)out\packages\" + package + @"-headers\", @"$(BaseDir)out\" + package + @"-headers.zip".ToLower(), CompressionLevel.Optimal, false);
             }
@@ -66,6 +67,7 @@ using System.Diagnostics;
                 CopyFilesRecursively(new DirectoryInfo(@"install\$(Platform)\$(Configuration)\bin\"), new DirectoryInfo(package_root + @"\binaries\$(Platform)\$(Configuration)\bin"));
                 Directory.CreateDirectory(package_root + @"\binaries\$(Platform)\$(Configuration)\lib");
                 CopyFilesRecursively(new DirectoryInfo(@"install\$(Platform)\$(Configuration)\lib\"), new DirectoryInfo(package_root + @"\binaries\$(Platform)\$(Configuration)\lib"));
+                File.Copy(@"$(BaseDir)install\$(Platform)\$(Configuration)\share\doc\pcre2\LICENCE.md", package_root + @"\binaries\$(Platform)\$(Configuration)\LICENCE.md", true);
                 ZipFile.CreateFromDirectory(@"$(BaseDir)out\packages\" + package + @"-binaries-$(Platform.ToLower())-$(Configuration.ToLower())\", @"$(BaseDir)out\"+ package + @"-binaries-$(Platform)-$(Configuration).zip".ToLower(), CompressionLevel.Optimal, false);
             }
 
